@@ -248,10 +248,6 @@ where
         let init_final_batch_size =
             multiset_hashes.init_hashes.len() + multiset_hashes.final_hashes.len();
 
-        // let (r_read_write_opening, _) = r_read_write
-        //     .split_at(r_read_write.len() - read_write_batch_size.next_power_of_two().log_2());
-        // let (r_init_final_opening, _) = r_init_final
-        //     .split_at(r_init_final.len() - init_final_batch_size.next_power_of_two().log_2());
         let (_, r_read_write_opening) =
             r_read_write.split_at(read_write_batch_size.next_power_of_two().log_2());
         let (_, r_init_final_opening) =
@@ -541,8 +537,6 @@ where
             transcript,
             Some(pcs_setup),
         );
-        // let (r_read_write_opening, r_read_write_batch_index) = r_read_write
-        //     .split_at(r_read_write.len() - read_write_batch_size.next_power_of_two().log_2());
         let (r_read_write_batch_index, r_read_write_opening) =
             r_read_write.split_at(read_write_batch_size.next_power_of_two().log_2());
 
@@ -553,8 +547,6 @@ where
             transcript,
             Some(pcs_setup),
         );
-        // let (r_init_final_opening, r_init_final_batch_index) = r_init_final
-        // .split_at(r_init_final.len() - init_final_batch_size.next_power_of_two().log_2());
         let (r_init_final_batch_index, r_init_final_opening) =
             r_init_final.split_at(init_final_batch_size.next_power_of_two().log_2());
 
@@ -693,6 +685,8 @@ where
             .zip(EqPolynomial::evals(r_read_write_batch_index).iter())
             .map(|(hash, eq_eval)| *hash * eq_eval)
             .sum();
+        println!("read_write_claim: {}", read_write_claim);
+        println!("combined_read_write_hash: {}", combined_read_write_hash);
         assert_eq!(combined_read_write_hash, read_write_claim);
 
         let combined_init_final_hash: F = init_final_hashes
